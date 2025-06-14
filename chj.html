@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CityHostelsJodhpur • Find Your Stay</title>
+  <meta name="description" content="Search, book, or list PGs & hostels with verified options, filters, and map view.">
+
+  <!-- Tailwind + Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>tailwind.config = { theme: { fontFamily: { sans:['Poppins','sans-serif'] } } }</script>
+
+  <!-- Libraries -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/wnumb@1.2.0/wNumb.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f4ff 0%, #fdf6f0 100%);
+    }
+    .glass {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+    }
+    .section-title {
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 8px #c7d2fe;
+    }
+    .hostel-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+      display: inline-block;
+    }
+    .hostel-badge.verified { background: #dbeafe; color: #2563eb; }
+    .hostel-badge.boys { background: #bbf7d0; color: #15803d; }
+    .hostel-badge.girls { background: #fbcfe8; color: #be185d; }
+    .hostel-badge.ac { background: #ede9fe; color: #7c3aed; }
+    .hostel-badge.nonac { background: #f3e8ff; color: #a21caf; }
+    .hostel-badge.price { background: #fef9c3; color: #b45309; }
+    .hostel-badge.room { background: #e0e7ff; color: #3730a3; }
+    .hostel-badge.location { background: #f1f5f9; color: #334155; }
+    .hostel-badge.facility { background: #f0fdf4; color: #166534; }
+    .hostel-badge.rating { background: #fef3c7; color: #b45309; }
+    .hostel-badge.vacant { background: #d1fae5; color: #047857; }
+    .hostel-badge.full { background: #fee2e2; color: #b91c1c; }
+    .hostel-card {
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .hostel-card:hover {
+      box-shadow: 0 12px 32px 0 rgba(59,130,246,0.18);
+      transform: translateY(-8px) scale(1.02);
+    }
+    .gradient-btn {
+      background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+      color: #fff;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 16px 0 rgba(59,130,246,0.10);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .gradient-btn:hover {
+      background: linear-gradient(90deg, #1e40af 0%, #0ea5e9 100%);
+      box-shadow: 0 8px 24px 0 rgba(59,130,246,0.18);
+    }
+    .gradient-section {
+      background: linear-gradient(120deg, #f0f9ff 0%, #fdf6f0 100%);
+    }
+    .footer-gradient {
+      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+    }
+  </style>
+</head>
+<body class="text-gray-800 font-sans">
+
+<!-- Nav -->
+<header class="bg-white/90 sticky top-0 shadow-lg z-50 glass">
+  <div class="container mx-auto flex items-center justify-between px-1 py-4">
+    <h1 class="text-3xl font-extrabold text-blue-700 tracking-tight drop-shadow-lg">CityHostelsJodhpur</h1>
+    <nav class="hidden md:flex space-x-6 text-gray-700 font-semibold">
+      <a href="#search" class="hover:text-blue-600 transition">Search</a>
+      <a href="#listings" class="hover:text-blue-600 transition">Listings</a>
+      <a href="#post" class="gradient-btn px-5 py-2">Post a Hostel</a>
+    </nav>
+    <div class="md:hidden">
+      <!-- burger menu icon -->
+    </div>
+  </div>
+</header>
+
+<!-- Hero w/Search -->
+<section id="search" class="relative h-screen bg-cover bg-center flex items-center justify-center" style="background-image:url('istockphoto-511119300-612x612.jpg');">
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-blue-900/30"></div>
+  <div class="relative container mx-auto flex flex-col items-center justify-center h-full px-4">
+    <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-8 text-center drop-shadow-2xl section-title">Where do you want to stay?</h2>
+    <form id="search-form" class="glass rounded-2xl shadow-2xl p-8 w-full max-w-3xl grid grid-cols-1 md:grid-cols-5 gap-6 items-end border border-blue-100">
+      <div class="flex flex-col">
+        <label for="search-location" class="text-xs font-semibold mb-1 text-blue-700">Location</label>
+        <input type="text" id="search-location" placeholder="City, Area" class="border border-blue-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-200"/>
+      </div>
+      <div class="flex flex-col">
+        <label for="search-roomtype" class="text-xs font-semibold mb-1 text-blue-700">Room Type</label>
+        <select id="search-roomtype" class="border border-blue-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-200">
+          <option value="">Any</option>
+          <option>Single</option>
+          <option>Double</option>
+          <option>Triple</option>
+          <option>Quad</option>
+        </select>
+      </div>
+      <div class="flex flex-col space-y-1">
+        <span class="text-xs font-semibold text-blue-700 mb-1">Facilities</span>
+        <label class="text-xs flex items-center"><input type="checkbox" id="search-ac" class="mr-1 accent-blue-600">AC Room</label>
+        <label class="text-xs flex items-center"><input type="checkbox" id="search-nonac" class="mr-1 accent-blue-600">Non-AC</label>
+      </div>
+      <div class="flex flex-col">
+        <label class="text-xs font-semibold mb-1 text-blue-700">Budget (₹)</label>
+        <div id="price-slider"></div>
+        <span id="price-value" class="text-xs text-blue-500 mt-1"></span>
+      </div>
+      <div class="flex flex-col space-y-2">
+        <button id="search-btn" type="button" class="gradient-btn px-6 py-2">Search</button>
+        <button type="button" class="bg-blue-100 text-blue-700 px-6 py-2 rounded-lg hover:bg-blue-200 transition w-full md:w-auto font-semibold text-base shadow border border-blue-300" onclick="window.location.reload();">
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Listings -->
+<section id="listings" class="container mx-auto px-6 py-16 gradient-section">
+  <div class="grid md:grid-cols-3 gap-10">
+    <!-- Example Card (repeat for each hostel) -->
+    <!-- ...existing hostel cards... -->
+    <!-- Just add class="hostel-card" to each card for extra effect -->
+    <!-- Example for one card: -->
+    <div class="bg-white rounded-2xl shadow-xl hostel-card border border-blue-100 p-0" 
+     data-aos="fade-up"
+     data-location="Masuriya"
+     data-roomtype="Triple,Quad"
+     data-price="5500"
+     data-ac="false">
+      <div class="swiper swiper-container rounded-t-2xl overflow-hidden">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="8465aa98e7b5c0cbcbfed15313f9b0ea.jpg" alt="Hostel Room 1" class="w-full h-48 object-cover"/></div>
+          <div class="swiper-slide"><img src="istockphoto-511119300-612x612.jpg" alt="Hostel Room 2" class="w-full h-48 object-cover"/></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-nav flex justify-between mt-2 px-4 pb-2">
+          <button class="swiper-prev-btn bg-gray-200 px-3 py-1 rounded text-sm hover:bg-gray-300">&#8592;</button>
+          <button class="swiper-next-btn bg-gray-200 px-3 py-1 rounded text-sm hover:bg-gray-300">&#8594;</button>
+        </div>
+      </div>
+      <div class="p-6">
+        <h3 class="font-bold text-2xl text-blue-700 mb-2">Swastik Boys Hostel & Mess</h3>
+        <div class="flex items-center text-yellow-500 mb-2">⭐⭐⭐⭐☆ <span class="ml-2 text-gray-500 text-sm">(45)</span></div>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <span class="hostel-badge verified">Verified</span>
+          <span class="hostel-badge boys">Boys</span>
+          <span class="hostel-badge nonac">NON-AC</span>
+        </div>
+        <span class="hostel-badge price mb-2">₹5,500/month</span>
+        <p class="text-gray-600 text-sm mb-4">Near Baba Ramdev Mandir, Masuriya</p>
+        <div class="flex gap-2">
+          <button onclick="openModal('Swastik Boys Hostel & Mess', '24x7 security, WiFi, Washing machine, Water cooler, Air cooler, Contact us for more info.')" class="gradient-btn px-4 py-2">View Details</button>
+          <a href="tel:+917737546503" class="bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-50 transition flex items-center font-semibold shadow">📞 Call</a>
+        </div>
+      </div>
+    </div>
+    <!-- ...repeat for other cards, using similar style... -->
+    <div class="bg-white rounded-2xl shadow-xl hostel-card border border-blue-100 p-0" 
+     data-aos="fade-up"
+     data-location="chopasni"
+     data-roomtype="Double"
+     data-price="6500"
+     data-ac="false">
+      <div class="swiper swiper-container rounded-t-2xl overflow-hidden">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="8465aa98e7b5c0cbcbfed15313f9b0ea.jpg" alt="Hostel Room 1" class="w-full h-48 object-cover"/></div>
+          <div class="swiper-slide"><img src="istockphoto-511119300-612x612.jpg" alt="Hostel Room 2" class="w-full h-48 object-cover"/></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-nav flex justify-between mt-2 px-4 pb-2">
+          <button class="swiper-prev-btn bg-gray-200 px-3 py-1 rounded text-sm hover:bg-gray-300">&#8592;</button>
+          <button class="swiper-next-btn bg-gray-200 px-3 py-1 rounded text-sm hover:bg-gray-300">&#8594;</button>
+        </div>
+      </div>
+      <div class="p-6">
+        <h3 class="font-bold text-2xl text-blue-700 mb-2">Swastik Boys Hostel 2</h3>
+        <div class="flex items-center text-yellow-500 mb-2">⭐⭐⭐⭐⭐  <span class="ml-2 text-gray-500 text-sm">(16)</span></div>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <span class="hostel-badge verified">Verified</span>
+          <span class="hostel-badge boys">Boys</span>
+          <span class="hostel-badge nonac">NON-AC</span>
+        </div>
+        <span class="hostel-badge price mb-2">₹6,500/month</span>
+        <p class="text-gray-600 text-sm mb-4">7 , Chopasani Rd,  Pratap Nagar</p>
+        <div class="flex gap-2">
+          <button onclick="openModal('Swastik Boys Hostel' , 'Water cooler, Contact us for more info.')" class="gradient-btn px-4 py-2">View Details</button>
+          <a href="tel:+917737546503" class="bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-50 transition flex items-center font-semibold shadow">📞 Call</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Post Listing CTA -->
+<section id="post" class="py-16 bg-gradient-to-r text-center">
+  <h2 class="text-3xl font-bold mb-4 text-blue-800 section-title">Own a hostel or PG?</h2>
+  <p class="mb-8 text-gray-600 text-lg">Register and list your property to reach thousands of students.</p>
+  
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-white/90 glass">
+  <div class="container mx-auto px-6">
+    <form action="https://formspree.io/f/xanjozwb" method="POST" class="max-w-xl mx-auto bg-white/95 p-8 rounded-2xl shadow-xl border border-blue-100">
+      <h3 class="text-2xl font-bold text-blue-700 mb-6 text-center">List Your Hostel/PG</h3>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Hostel & Pg name</label>
+        <input type="text" name="Hostel Name" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" placeholder="Hostel & Pg name" required/>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Email</label>
+        <input type="email" name="Email" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" placeholder="you@example.com" required/>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Phone Number</label>
+        <input type="tel" name="Phone" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" placeholder="Enter your phone number" required pattern="[0-9]{10,15}"/>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Your All Details</label>
+        <textarea name="Details" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" rows="4" placeholder="Please provide all relevant details about your hostel/PG..." required></textarea>
+      </div>
+      <div class="flex flex-col md:flex-row gap-4 mt-6">
+        <button class="gradient-btn px-8 py-3 text-lg">Post Your Listing</button>
+        <button type="button" class="bg-blue-100 text-blue-700 px-8 py-3 rounded-lg hover:bg-blue-200 transition w-full md:w-auto font-semibold text-base shadow border border-blue-300" onclick="window.location.reload();">
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Reviews Section -->
+<section id="reviews" class="py-20 bg-gradient-to-br from-blue-50 to-blue-100">
+  <div class="container mx-auto px-6 max-w-2xl">
+    <h2 class="text-4xl font-extrabold mb-10 text-blue-800 text-center section-title">Student Reviews</h2>
+    <!-- Review Form -->
+    <form id="review-form" class="bg-white rounded-2xl shadow-2xl p-8 mb-12 border border-blue-100 glass">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Your Name</label>
+        <input type="text" id="reviewer-name" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" placeholder="Enter your name" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Your Review</label>
+        <textarea id="review-text" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" rows="3" placeholder="Write your review..." required></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Rating</label>
+        <select id="review-rating" class="w-full px-4 py-2 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-200" required>
+          <option value="">Select rating</option>
+          <option value="5">⭐⭐⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+          <option value="3">⭐⭐⭐</option>
+          <option value="2">⭐⭐</option>
+          <option value="1">⭐</option>
+        </select>
+      </div>
+      <button type="submit" class="gradient-btn px-8 py-2 text-lg">Submit Review</button>
+    </form>
+    <!-- Reviews List -->
+    <div id="reviews-list" class="space-y-6">
+      <!-- Reviews will appear here -->
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-gradient text-gray-200 py-12 mt-12">
+  <div class="container mx-auto px-6 grid md:grid-cols-3 gap-8">
+    <div>
+      <h3 class="text-xl font-semibold mb-2">Contact Us</h3>
+      <p>+91 </p>
+      <p>info@CityHostelsJodhpur.com</p>
+    </div>
+    <div>
+      <h3 class="text-xl font-semibold mb-2">Follow Us On</h3>
+      <div class="flex space-x-4 mt-2 text-2xl">
+        <a href="https://instagram.com/city_hostels_jodhpur" aria-label="Instagram" class="hover:text-pink-400 transition">📸INSTAGRAM</a>
+      </div>
+    </div>
+    <div>
+      <h3 class="text-xl font-semibold mb-2">Legal</h3>
+      <a href="terms-of-services.html" class="block hover:underline">Terms of Service</a>
+      <a href="privacy-policy.html" class="block hover:underline">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="text-center mt-8 text-sm text-gray-400">&copy; 2025 CityHostelsJodhpur. All Rights Reserved.</div>
+</footer>
+
+<!-- JS Initialization -->
+<script>
+  // Make these functions globally available
+  function openModal(title, info) {
+    document.getElementById('details-modal').classList.remove('hidden');
+    if (title) document.querySelector('#details-modal h2').textContent = title;
+    if (info) {
+      // Split by comma and trim spaces
+      const items = info.split(',').map(i => i.trim()).filter(i => i);
+      const ol = `<ol class="list-decimal list-inside space-y-1">${items.map(i => `<li>${i}</li>`).join('')}</ol>`;
+      document.querySelector('#details-modal .modal-info').innerHTML = ol;
+    }
+  }
+  function closeModal() {
+    document.getElementById('details-modal').classList.add('hidden');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({ duration: 800 });
+
+    // Price slider
+    const slider = document.getElementById('price-slider');
+    const priceValue = document.getElementById('price-value');
+    noUiSlider.create(slider, {
+      start: [3000, 15000],
+      connect: true,
+      range: { 'min': 3000, 'max': 15000 },
+      format: wNumb({ decimals: 0, prefix: '₹' })
+    });
+    slider.noUiSlider.on('update', function(values) {
+      priceValue.textContent = values.join(' - ');
+    });  
+    // Swiper galleries
+    document.querySelectorAll('.swiper-container').forEach((el) => {
+      const swiper = new Swiper(el, {
+        pagination: { el: el.querySelector('.swiper-pagination'), clickable: true },
+        navigation: {
+          nextEl: el.querySelector('.swiper-next-btn'),
+          prevEl: el.querySelector('.swiper-prev-btn')
+        }
+      });
+    });
+  });
+
+  document.getElementById('search-btn').addEventListener('click', function() {
+    const location = document.getElementById('search-location').value.trim().toLowerCase();
+    const roomtype = document.getElementById('search-roomtype').value.trim().toLowerCase();
+    const acChecked = document.getElementById('search-ac').checked;
+    const nonacChecked = document.getElementById('search-nonac').checked;
+    const priceRange = document.getElementById('price-slider').noUiSlider.get().map(v => Number(v.replace(/[^\d]/g, '')));
+
+    document.querySelectorAll('#listings .bg-white').forEach(card => {
+      const cardLocation = (card.getAttribute('data-location') || '').toLowerCase();
+      const cardRoomtypes = (card.getAttribute('data-roomtype') || '').toLowerCase().split(/[,|]/).map(s => s.trim());
+      const cardAC = card.getAttribute('data-ac');
+      const cardPrice = Number(card.getAttribute('data-price') || 0);
+
+      // Location filter
+      const matchLocation = !location || cardLocation.includes(location);
+
+      // Roomtype filter
+      const matchRoomtype = !roomtype || cardRoomtypes.includes(roomtype);
+
+      // AC/Non-AC filter
+      let matchAC = true;
+      if (acChecked && !nonacChecked) {
+        matchAC = cardAC === "true";
+      } else if (!acChecked && nonacChecked) {
+        matchAC = cardAC === "false";
+      } else if (acChecked && nonacChecked) {
+        matchAC = cardAC === "true" || cardAC === "false";
+      }
+
+      // Budget filter
+      const matchBudget = (!priceRange.length || (cardPrice >= priceRange[0] && cardPrice <= priceRange[1]));
+
+      card.style.display = (matchLocation && matchRoomtype && matchAC && matchBudget) ? '' : 'none';
+    });
+  });
+</script>
+
+<!-- Details Modal (hidden by default) -->
+<div id="details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg p-8 max-w-lg w-full relative">
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 text-2xl">&times;</button>
+    <h2 class="text-xl font-bold mb-4">Hostel Details</h2>
+    <div class="modal-info"></div>
+  </div>
+</div>
+
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+  // Paste your Firebase config here
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkwrWig7TgZYUE4GGRooVgJvzGuyT5il0",
+    authDomain: "reviews-40489.firebaseapp.com",
+    projectId: "reviews-40489",
+    // ...other config...
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const reviewForm = document.getElementById('review-form');
+    const reviewsList = document.getElementById('reviews-list');
+    let reviews = [];
+
+    function renderReviews(reviews) {
+      reviewsList.innerHTML = reviews.length
+        ? reviews.map(r => `
+        <div class="bg-white rounded-2xl shadow-md border border-blue-100 p-6 flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xl">
+              ${r.name ? r.name[0].toUpperCase() : "?"}
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center mb-1">
+              <span class="font-semibold text-blue-700 mr-2">${r.name}</span>
+              <span class="flex text-yellow-400 text-lg">
+                ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
+              </span>
+            </div>
+            <div class="text-gray-700 mb-1">${r.text}</div>
+          </div>
+        </div>
+      `).join('')
+        : '<div class="text-gray-400 text-center">No reviews yet. Be the first to review!</div>';
+    }
+    // Listen for real-time updates from Firestore
+    db.collection("reviews").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+      const reviews = snapshot.docs.map(doc => doc.data());
+      renderReviews(reviews);
+    });
+
+    if (reviewForm) {
+      reviewForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('reviewer-name').value.trim();
+        const text = document.getElementById('review-text').value.trim();
+        const rating = parseInt(document.getElementById('review-rating').value, 10);
+        if (name && text && rating) {
+          db.collection("reviews").add({
+            name,
+            text,
+            rating,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(() => {
+            reviewForm.reset();
+          });
+        }
+      });
+    }
+
+    document.getElementById('details-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  });
+</script>
+</body>
+</html>
